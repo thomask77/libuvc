@@ -119,12 +119,10 @@ if(BUILD_EXAMPLE)
 endif()
 
 if(BUILD_TEST)
-
-    # Try to find OpenCV using a module or pkg-config. If that doesn't work, search for the header.
   find_package(OpenCV)
 
   add_executable(uvc_test src/test.cpp)
-  target_link_libraries(uvc_test uvc ${OpenCV_LIBS})
+  target_link_libraries(uvc_test uvc ${OpenCV_LIBS} )
 endif()
 
 install(TARGETS ${UVC_TARGETS}

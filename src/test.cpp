@@ -40,7 +40,6 @@
 void cb(uvc_frame_t *frame, void *ptr) {
   uvc_frame_t *bgr;
   uvc_error_t ret;
-  cv::Mat *cvImg;
 
   printf("callback! length = %u, ptr = %p\n", frame->data_bytes, ptr);
 
@@ -57,19 +56,11 @@ void cb(uvc_frame_t *frame, void *ptr) {
     return;
   }
 
-  cvImg = cv::createImageHeader(
-      cv::Size(bgr->width, bgr->height),
-      cv::DEPTH_8U,
-      3
-  );
-
-  cv::setData(cvImg, bgr->data, bgr->width * 3); 
+  cv::Mat cvImg( cv::Size(bgr->width, bgr->height), CV_8UC3, bgr->data);
 
   cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
-  cv::imshow("Test", *cvImg);
+  cv::imshow("Test", cvImg);
   cv::waitKey(10);
-
-  cv::releaseImageHeader(&cvImg);
 
   uvc_free_frame(bgr);
 }
