@@ -926,11 +926,10 @@ uvc_error_t uvc_stream_start(
                                 endpoint_bytes_per_packet - 1) / endpoint_bytes_per_packet;
 
         /* But keep a reasonable limit: Otherwise we start dropping data */
-/*
+
         // HACK: Our camera needs 3448*808*2 = 5571968 / 49152 = 114 transfers!
         if (packets_per_transfer > 32)
           packets_per_transfer = 32;
-*/
         
         total_transfer_size = packets_per_transfer * endpoint_bytes_per_packet;
         break;
