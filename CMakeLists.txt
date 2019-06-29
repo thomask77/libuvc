@@ -121,19 +121,10 @@ endif()
 if(BUILD_TEST)
 
     # Try to find OpenCV using a module or pkg-config. If that doesn't work, search for the header.
-  find_package(opencv QUIET)
-  if(OPENCV_FOUND)
-    set(OPENCV_LINK_FLAGS ${OPENCV_LIBRARIES})
-  else()
-    pkg_check_modules(OPENCV QUIET opencv)
-    if(OPENCV_FOUND)
-        set(OPENCV_INCLUDE_DIR ${OPENCV_INCLUDE_DIRS})
-        set(OPENCV_LINK_FLAGS ${OPENCV_LDFLAGS})
-    endif()
-  endif()
+  find_package(OpenCV)
 
-  add_executable(uvc_test src/test.c)
-  target_link_libraries(uvc_test uvc ${OPENCV_LDFLAGS})
+  add_executable(uvc_test src/test.cpp)
+  target_link_libraries(uvc_test uvc ${OpenCV_LIBS})
 endif()
 
 install(TARGETS ${UVC_TARGETS}

@@ -32,16 +32,17 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 #include <stdio.h>
-#include <opencv/highgui.h>
+#include <unistd.h>
+#include <opencv2/highgui.hpp>
 
 #include "libuvc/libuvc.h"
 
 void cb(uvc_frame_t *frame, void *ptr) {
   uvc_frame_t *bgr;
   uvc_error_t ret;
-  IplImage* cvImg;
+  cv::Mat *cvImg;
 
-  printf("callback! length = %u, ptr = %d\n", frame->data_bytes, (int) ptr);
+  printf("callback! length = %u, ptr = %p\n", frame->data_bytes, ptr);
 
   bgr = uvc_allocate_frame(frame->width * frame->height * 3);
   if (!bgr) {
@@ -56,18 +57,19 @@ void cb(uvc_frame_t *frame, void *ptr) {
     return;
   }
 
-  cvImg = cvCreateImageHeader(
-      cvSize(bgr->width, bgr->height),
-      IPL_DEPTH_8U,
-      3);
+  cvImg = cv::createImageHeader(
+      cv::Size(bgr->width, bgr->height),
+      cv::DEPTH_8U,
+      3
+  );
 
-  cvSetData(cvImg, bgr->data, bgr->width * 3); 
+  cv::setData(cvImg, bgr->data, bgr->width * 3); 
 
-  cvNamedWindow("Test", CV_WINDOW_AUTOSIZE);
-  cvShowImage("Test", cvImg);
-  cvWaitKey(10);
+  cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
+  cv::imshow("Test", *cvImg);
+  cv::waitKey(10);
 
-  cvReleaseImageHeader(&cvImg);
+  cv::releaseImageHeader(&cvImg);
 
   uvc_free_frame(bgr);
 }
@@ -115,7 +117,7 @@ int main(int argc, char **argv) {
       if (res < 0) {
         uvc_perror(res, "get_mode");
       } else {
-        res = uvc_start_streaming(devh, &ctrl, cb, 12345, 0);
+        res = uvc_start_streaming(devh, &ctrl, cb, (void*)12345, 0);
 
         if (res < 0) {
           uvc_perror(res, "start_streaming");
@@ -134,7 +136,7 @@ int main(int argc, char **argv) {
           }
           sleep(10);
           uvc_stop_streaming(devh);
-	  puts("Done streaming.");
+          puts("Done streaming.");
         }
       }
 
