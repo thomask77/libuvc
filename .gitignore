@@ -1,2 +1,8 @@
 # Build directory (recommended location)
 build/
+
+# IDE configurations
+.cproject
+.project
+.settings
+.vscode
