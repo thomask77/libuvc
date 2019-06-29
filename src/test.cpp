@@ -100,7 +100,9 @@ int main(int argc, char **argv) {
       uvc_print_diag(devh, stderr);
 
       res = uvc_get_stream_ctrl_format_size(
-          devh, &ctrl, UVC_FRAME_FORMAT_YUYV, 640, 480, 30
+//          devh, &ctrl, UVC_FRAME_FORMAT_YUYV, 640, 480, 30
+//          devh, &ctrl, UVC_FRAME_FORMAT_YUYV, 898, 200, 240
+          devh, &ctrl, UVC_FRAME_FORMAT_YUYV, 3448, 808, 60
       );
 
       uvc_print_stream_ctrl(&ctrl, stderr);
